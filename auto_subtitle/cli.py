@@ -110,10 +110,10 @@ def get_subtitles(audio_paths: list, output_ass: bool, output_dir: str, transcri
         style.primarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
         style.secondarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
         style.outlinecolor = pysubs2.Color(0, 0, 0, 0)  # Black, fully opaque
-        style.backcolor = pysubs2.Color(0, 0, 0, 128)  # Black, 50% transparent
+        style.backcolor = pysubs2.Color(255, 0, 0, 128)  # Red, 50% transparent
         style.alignment = 2  # Centered at the bottom
 
-        # Define styles here (customize this part as needed)
+        # Add the style to the SSAFile
         subs.styles["Default"] = style
         # subs.styles["Default"] = pysubs2.SSAStyle(primarycolor="#FFFFFF", secondarycolor="#FFFF00", outlinecolor="#000000")
         # Add more styles if needed
