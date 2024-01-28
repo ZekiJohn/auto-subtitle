@@ -104,10 +104,17 @@ def get_subtitles(audio_paths: list, output_ass: bool, output_dir: str, transcri
 
         # Now we create an ASS file instead of SRT
         subs = pysubs2.SSAFile()
+        style = pysubs2.SSAStyle()
+        style.fontname = "Arial"
+        style.fontsize = 20
+        style.primarycolor = pysubs2.utils.color(255, 255, 255, 0)  # White, fully opaque
+        style.secondarycolor = pysubs2.utils.color(255, 255, 255, 0)  # White, fully opaque
+        style.outlinecolor = pysubs2.utils.color(0, 0, 0, 0)  # Black, fully opaque
+        style.backcolor = pysubs2.utils.color(0, 0, 0, 128)  # Black, 50% transparent
+        style.alignment = 2  # Centered at the bottom
 
         # Define styles here (customize this part as needed)
-        subs.styles["Default"] = pysubs2.SSAStyle(primarycolor="#FFFFFF", secondarycolor="#FFFF00",
-                                                  outlinecolor="#000000")
+        subs.styles["Default"] = pysubs2.SSAStyle(primarycolor="#FFFFFF", secondarycolor="#FFFF00", outlinecolor="#000000")
         # Add more styles if needed
 
         # Convert the transcription segments into ASS dialogue lines
