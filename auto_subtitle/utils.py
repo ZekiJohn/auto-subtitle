@@ -32,6 +32,8 @@ def format_timestamp(seconds: float, always_include_hours: bool = False):
 
 def write_srt(transcript: Iterator[dict], file: TextIO):
     for i, segment in enumerate(transcript, start=1):
+        print("===================================SEGMENT")
+        print(segment)
         print(
             f"{i}\n"
             f"{format_timestamp(segment['start'], always_include_hours=True)} --> "
