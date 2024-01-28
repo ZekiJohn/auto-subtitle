@@ -1,6 +1,6 @@
 import os
 from typing import Iterator, TextIO
-
+import pysubs2
 
 def str2bool(string):
     string = string.lower()
