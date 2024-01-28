@@ -89,76 +89,76 @@ def get_audio(paths):
     return audio_paths
 
 
-def get_subtitles(audio_paths: list, output_ass: bool, output_dir: str, transcribe: callable):
-    subtitles_path = {}
-
-    for path, audio_path in audio_paths.items():
-        ass_path = output_dir if output_ass else tempfile.gettempdir()
-        ass_path = os.path.join(ass_path, f"{filename(path)}.ass")
-
-        print(f"Generating ASS subtitles for {filename(path)}... This might take a while.")
-
-        warnings.filterwarnings("ignore")
-        result = transcribe(audio_path)
-        warnings.filterwarnings("default")
-
-        # Now we create an ASS file instead of SRT
-        subs = pysubs2.SSAFile()
-        style = pysubs2.SSAStyle()
-        style.fontname = "Arial"
-        style.fontsize = 20
-        style.primarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
-        style.secondarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
-        style.outlinecolor = pysubs2.Color(0, 0, 0, 0)  # Black, fully opaque
-        style.backcolor = pysubs2.Color(255, 0, 0, 128)  # Red, 50% transparent
-        style.alignment = 2  # Centered at the bottom
-
-        # Add the style to the SSAFile
-        subs.styles["Default"] = style
-        # subs.styles["Default"] = pysubs2.SSAStyle(primarycolor="#FFFFFF", secondarycolor="#FFFF00", outlinecolor="#000000")
-        # Add more styles if needed
-
-        # Convert the transcription segments into ASS dialogue lines
-        for segment in result["segments"]:
-            start_time = int(segment["start"] * 1000)  # Assuming these are in seconds
-            end_time = int(segment["end"] * 1000)
-            text = segment["text"]
-
-            # Create a new event for each line of subtitles
-            line = pysubs2.SSAEvent(start=start_time, end=end_time, text=text)
-            line.style = "Default"  # Set the style to "Default" or any other predefined style
-
-            # Append the event to the subs object
-            subs.events.append(line)
-
-        # Save the subtitles to an .ass file
-        subs.save(ass_path)
-
-        subtitles_path[path] = ass_path
-
-    return subtitles_path
-
-# def get_subtitles(audio_paths: list, output_srt: bool, output_dir: str, transcribe: callable):
+# def get_subtitles(audio_paths: list, output_ass: bool, output_dir: str, transcribe: callable):
 #     subtitles_path = {}
 #
 #     for path, audio_path in audio_paths.items():
-#         srt_path = output_dir if output_srt else tempfile.gettempdir()
-#         srt_path = os.path.join(srt_path, f"{filename(path)}.srt")
+#         ass_path = output_dir if output_ass else tempfile.gettempdir()
+#         ass_path = os.path.join(ass_path, f"{filename(path)}.ass")
 #
-#         print(
-#             f"Generating subtitles for {filename(path)}... This might take a while."
-#         )
+#         print(f"Generating ASS subtitles for {filename(path)}... This might take a while.")
 #
 #         warnings.filterwarnings("ignore")
 #         result = transcribe(audio_path)
 #         warnings.filterwarnings("default")
 #
-#         with open(srt_path, "w", encoding="utf-8") as srt:
-#             write_srt(result["segments"], file=srt)
+#         # Now we create an ASS file instead of SRT
+#         subs = pysubs2.SSAFile()
+#         style = pysubs2.SSAStyle()
+#         style.fontname = "Arial"
+#         style.fontsize = 20
+#         style.primarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
+#         style.secondarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
+#         style.outlinecolor = pysubs2.Color(0, 0, 0, 0)  # Black, fully opaque
+#         style.backcolor = pysubs2.Color(255, 0, 0, 128)  # Red, 50% transparent
+#         style.alignment = 2  # Centered at the bottom
 #
-#         subtitles_path[path] = srt_path
+#         # Add the style to the SSAFile
+#         subs.styles["Default"] = style
+#         # subs.styles["Default"] = pysubs2.SSAStyle(primarycolor="#FFFFFF", secondarycolor="#FFFF00", outlinecolor="#000000")
+#         # Add more styles if needed
+#
+#         # Convert the transcription segments into ASS dialogue lines
+#         for segment in result["segments"]:
+#             start_time = int(segment["start"] * 1000)  # Assuming these are in seconds
+#             end_time = int(segment["end"] * 1000)
+#             text = segment["text"]
+#
+#             # Create a new event for each line of subtitles
+#             line = pysubs2.SSAEvent(start=start_time, end=end_time, text=text)
+#             line.style = "Default"  # Set the style to "Default" or any other predefined style
+#
+#             # Append the event to the subs object
+#             subs.events.append(line)
+#
+#         # Save the subtitles to an .ass file
+#         subs.save(ass_path)
+#
+#         subtitles_path[path] = ass_path
 #
 #     return subtitles_path
+
+def get_subtitles(audio_paths: list, output_srt: bool, output_dir: str, transcribe: callable):
+    subtitles_path = {}
+
+    for path, audio_path in audio_paths.items():
+        srt_path = output_dir if output_srt else tempfile.gettempdir()
+        srt_path = os.path.join(srt_path, f"{filename(path)}.srt")
+
+        print(
+            f"Generating subtitles for {filename(path)}... This might take a while."
+        )
+
+        warnings.filterwarnings("ignore")
+        result = transcribe(audio_path)
+        warnings.filterwarnings("default")
+
+        with open(srt_path, "w", encoding="utf-8") as srt:
+            write_srt(result["segments"], file=srt)
+
+        subtitles_path[path] = srt_path
+
+    return subtitles_path
 
 
 if __name__ == '__main__':
