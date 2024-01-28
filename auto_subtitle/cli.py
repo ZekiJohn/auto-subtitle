@@ -112,12 +112,15 @@ def get_subtitles(audio_paths: list, output_ass: bool, output_dir: str, transcri
 
         # Convert the transcription segments into ASS dialogue lines
         for segment in result["segments"]:
-            start_time = int(segment["start"] * 1000)  # convert seconds to milliseconds
-            end_time = int(segment["end"] * 1000)  # convert seconds to milliseconds
+            start_time = int(segment["start"] * 1000)  # Assuming these are in seconds
+            end_time = int(segment["end"] * 1000)
             text = segment["text"]
 
-            # Here you can add karaoke effects or other formatting as needed
-            line = pysubs2.SSALine(start=start_time, end=end_time, style="Default", text=text)
+            # Create a new event for each line of subtitles
+            line = pysubs2.SSAEvent(start=start_time, end=end_time, text=text)
+            line.style = "Default"  # Set the style to "Default" or any other predefined style
+
+            # Append the event to the subs object
             subs.events.append(line)
 
         # Save the subtitles to an .ass file
