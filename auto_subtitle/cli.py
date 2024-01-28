@@ -112,8 +112,8 @@ def get_subtitles(audio_paths: list, output_ass: bool, output_dir: str, transcri
 
         # Convert the transcription segments into ASS dialogue lines
         for segment in result["segments"]:
-            start_time = pysubs2.time.timestamp_to_ms(segment["start"])
-            end_time = pysubs2.time.timestamp_to_ms(segment["end"])
+            start_time = int(segment["start"] * 1000)  # convert seconds to milliseconds
+            end_time = int(segment["end"] * 1000)  # convert seconds to milliseconds
             text = segment["text"]
 
             # Here you can add karaoke effects or other formatting as needed
