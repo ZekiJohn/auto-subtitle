@@ -5,7 +5,7 @@ import argparse
 import warnings
 import tempfile
 import pysubs2
-from .utils import filename, str2bool, write_srt
+from .utils import filename, str2bool, write_srt, write_ass
 
 
 def main():
@@ -154,7 +154,8 @@ def get_subtitles(audio_paths: list, output_srt: bool, output_dir: str, transcri
         warnings.filterwarnings("default")
 
         with open(srt_path, "w", encoding="utf-8") as srt:
-            write_srt(result["segments"], file=srt)
+            # write_srt(result["segments"], file=srt)
+            write_ass(result["segments"], file=srt)
 
         subtitles_path[path] = srt_path
 

@@ -30,6 +30,35 @@ def format_timestamp(seconds: float, always_include_hours: bool = False):
     return f"{hours_marker}{minutes:02d}:{seconds:02d},{milliseconds:03d}"
 
 
+
+def write_ass(transcript, file):
+    # Create a new SSAFile
+    subs = pysubs2.SSAFile()
+
+    # Define the style for the subtitles
+    style = pysubs2.SSAStyle()
+    style.fontname = "Arial"
+    style.fontsize = 20
+    style.primarycolor = pysubs2.Color(255, 255, 255, 0)  # White, fully opaque
+    style.secondarycolor = pysubs2.Color(255, 0, 0, 0)    # Red, fully opaque
+    style.outlinecolor = pysubs2.Color(0, 0, 0, 0)        # Black, fully opaque
+    style.backcolor = pysubs2.Color(0, 0, 0, 128)         # Black, 50% transparent
+    style.alignment = 2  # Centered at the bottom
+    subs.styles["Default"] = style
+
+    # Convert the transcript data to subtitle events
+    for segment in transcript:
+        start_time = int(segment['start'] * 1000)  # Convert to milliseconds
+        end_time = int(segment['end'] * 1000)
+        text = segment['text'].strip().replace('-->', '->')
+        event = pysubs2.SSAEvent(start=start_time, end=end_time, text=text)
+        event.style = "Default"
+        subs.events.append(event)
+
+    # Save the ASS subtitle file
+    subs.save(file)
+
+
 def write_srt(transcript: Iterator[dict], file: TextIO):
     for i, segment in enumerate(transcript, start=1):
         print("===================================SEGMENT")
