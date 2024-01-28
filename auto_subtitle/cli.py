@@ -4,6 +4,7 @@ import whisper
 import argparse
 import warnings
 import tempfile
+import pysubs2
 from .utils import filename, str2bool, write_srt
 
 
